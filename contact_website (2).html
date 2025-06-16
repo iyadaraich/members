@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Custom Diamond Cursor */
+        body {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ffffff" stroke="%23003366" stroke-width="2" d="M12 2L18 8L12 14L6 8Z"/></svg>') 12 12, auto;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #001122, #003366, #002244);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        a, button {
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ffdd00" stroke="%23003366" stroke-width="2" d="M12 2L18 8L12 14L6 8Z"/></svg>') 12 12, pointer;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #001122, #003366);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease-out;
+        }
+
+        .loading-screen.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin-bottom: 30px;
+        }
+
+        .loader::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top: 4px solid #4da6ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loader::after {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 60px;
+            height: 60px;
+            border: 4px solid transparent;
+            border-bottom: 4px solid #66b3ff;
+            border-radius: 50%;
+            animation: spin 2s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #4da6ff;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        /* Main Content */
+        .main-content {
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .main-content.show {
+            opacity: 1;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 17, 34, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 2px solid rgba(77, 166, 255, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4da6ff;
+            text-shadow: 0 0 10px rgba(77, 166, 255, 0.5);
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .lang-toggle {
+            background: linear-gradient(45deg, #003366, #004488);
+            border: 2px solid #4da6ff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(77, 166, 255, 0.3);
+        }
+
+        .lang-toggle:hover {
+            background: linear-gradient(45deg, #004488, #0055aa);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(77, 166, 255, 0.5);
+        }
+
+        .main-menu-btn {
+            background: linear-gradient(45deg, #ff6b35, #ff8c42);
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+
+        .main-menu-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.6);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 120px 30px 50px;
+            min-height: 100vh;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #4da6ff, #66b3ff, #80c0ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 20px rgba(77, 166, 255, 0.5); }
+            to { text-shadow: 0 0 30px rgba(77, 166, 255, 0.8); }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            color: #b3d9ff;
+        }
+
+        /* 3D Icons */
+        .icon-3d {
+            display: inline-block;
+            font-size: 3rem;
+            margin: 0 20px;
+            animation: float 3s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(77, 166, 255, 0.3));
+            transition: transform 0.3s ease;
+        }
+
+        .icon-3d:hover {
+            transform: scale(1.3) rotateY(15deg);
+        }
+
+        .icon-3d:nth-child(1) { animation-delay: 0s; }
+        .icon-3d:nth-child(2) { animation-delay: 0.5s; }
+        .icon-3d:nth-child(3) { animation-delay: 1s; }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotateX(0deg); }
+            50% { transform: translateY(-20px) rotateX(10deg); }
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: rgba(0, 34, 68, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(77, 166, 255, 0.3);
+            border-radius: 20px;
+            padding: 50px;
+            margin: 50px auto;
+            max-width: 800px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(77, 166, 255, 0.1), transparent);
+            animation: shine 3s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            color: #4da6ff;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(77, 166, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(0, 17, 34, 0.8);
+            color: white;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #4da6ff;
+            box-shadow: 0 0 20px rgba(77, 166, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #4da6ff, #66b3ff);
+            border: none;
+            color: white;
+            padding: 20px 50px;
+            border-radius: 25px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(77, 166, 255, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(77, 166, 255, 0.6);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        /* Floating Elements */
+        .floating-element {
+            position: fixed;
+            opacity: 0.1;
+            animation: floatAround 20s infinite linear;
+            pointer-events: none;
+        }
+
+        .floating-element:nth-child(1) {
+            top: 20%;
+            left: 10%;
+            animation-duration: 25s;
+        }
+
+        .floating-element:nth-child(2) {
+            top: 60%;
+            right: 15%;
+            animation-duration: 30s;
+            animation-direction: reverse;
+        }
+
+        .floating-element:nth-child(3) {
+            bottom: 20%;
+            left: 20%;
+            animation-duration: 35s;
+        }
+
+        @keyframes floatAround {
+            0% { transform: translateX(0) translateY(0) rotate(0deg); }
+            25% { transform: translateX(100px) translateY(-50px) rotate(90deg); }
+            50% { transform: translateX(200px) translateY(0) rotate(180deg); }
+            75% { transform: translateX(100px) translateY(50px) rotate(270deg); }
+            100% { transform: translateX(0) translateY(0) rotate(360deg); }
+        }
+
+        /* Success Message */
+        .success-message {
+            background: linear-gradient(45deg, #28a745, #20c997);
+            color: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-top: 30px;
+            text-align: center;
+            font-size: 1.4rem;
+            font-weight: bold;
+            display: none;
+            animation: slideIn 0.5s ease-out;
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .success-message::before {
+            content: '✅';
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 15px;
+            animation: bounce 1s ease-in-out infinite;
+        }
+
+        .success-message::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: successShine 2s ease-in-out;
+        }
+
+        @keyframes successPulse {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        @keyframes successShine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Loading Button State */
+        .submit-btn:disabled {
+            background: linear-gradient(45deg, #6c757d, #868e96);
+            cursor: not-allowed;
+            transform: none;
+            opacity: 0.7;
+        }
+
+        .submit-btn:disabled:hover {
+            transform: none;
+            box-shadow: 0 10px 30px rgba(77, 166, 255, 0.4);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.2rem; }
+            .contact-form { padding: 30px 20px; }
+            .container { padding: 100px 20px 30px; }
+            .header { padding: 10px 20px; }
+            .nav-buttons { flex-direction: column; gap: 10px; }
+        }
+
+        /* English Styles */
+        [lang="en"] {
+            direction: ltr;
+        }
+
+        [lang="en"] .header {
+            flex-direction: row-reverse;
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader"></div>
+        <div class="loading-text" id="loadingText">جاري التحميل...</div>
+    </div>
+
+    <!-- Floating Background Elements -->
+    <div class="floating-element">💎</div>
+    <div class="floating-element">✨</div>
+    <div class="floating-element">🌟</div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo" id="logo">تواصل معنا</div>
+            <div class="nav-buttons">
+                <button class="lang-toggle" id="langToggle" onclick="toggleLanguage()">English</button>
+                <a href="https://iyadaraich.github.io/main_menu" class="main-menu-btn" id="mainMenuBtn">القائمة الرئيسية</a>
+            </div>
+        </header>
+
+        <!-- Container -->
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <h1 id="heroTitle">تواصل معنا</h1>
+                <p id="heroSubtitle">نحن هنا للاستماع إليك ومساعدتك</p>
+                
+                <div class="icons-container">
+                    <span class="icon-3d">📧</span>
+                    <span class="icon-3d">💬</span>
+                    <span class="icon-3d">🚀</span>
+                </div>
+            </section>
+
+            <!-- Contact Form -->
+            <section class="contact-form">
+                <form id="contactForm" onsubmit="handleSubmit(event)">
+                    <div class="form-group">
+                        <label for="name" id="nameLabel">الاسم الكامل</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email" id="emailLabel">البريد الإلكتروني</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject" id="subjectLabel">الموضوع</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message" id="messageLabel">الرسالة</label>
+                        <textarea id="message" name="message" rows="6" required></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">إرسال الرسالة</button>
+                </form>
+                
+                <div class="success-message" id="successMessage">
+                    تم إرسال رسالتك بنجاح! سنقوم بالرد عليك قريباً.
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'ar';
+        
+        const translations = {
+            ar: {
+                logo: 'تواصل معنا',
+                langToggle: 'English',
+                mainMenuBtn: 'القائمة الرئيسية',
+                heroTitle: 'تواصل معنا',
+                heroSubtitle: 'نحن هنا للاستماع إليك ومساعدتك',
+                nameLabel: 'الاسم الكامل',
+                emailLabel: 'البريد الإلكتروني',
+                subjectLabel: 'الموضوع',
+                messageLabel: 'الرسالة',
+                submitBtn: 'إرسال الرسالة',
+                successMessage: '🎉 تم إرسال رسالتك بنجاح إلى iyadaraigames@gmail.com! سنقوم بالرد عليك في أقرب وقت ممكن.',
+                loadingText: 'جاري التحميل...'
+            },
+            en: {
+                logo: 'Contact Us',
+                langToggle: 'العربية',
+                mainMenuBtn: 'Main Menu',
+                heroTitle: 'Contact Us',
+                heroSubtitle: 'We are here to listen and help you',
+                nameLabel: 'Full Name',
+                emailLabel: 'Email Address',
+                subjectLabel: 'Subject',
+                messageLabel: 'Message',
+                submitBtn: 'Send Message',
+                successMessage: '🎉 Your message has been sent successfully to iyadaraigames@gmail.com! We will reply to you as soon as possible.',
+                loadingText: 'Loading...'
+            }
+        };
+
+        // Loading Screen
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('fade-out');
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('mainContent').classList.add('show');
+                }, 1000);
+            }, 2000);
+        });
+
+        // Language Toggle
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            document.documentElement.lang = currentLang;
+            document.documentElement.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update all text elements
+            Object.keys(translations[currentLang]).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    if (element.tagName === 'INPUT' && element.type === 'submit') {
+                        element.value = translations[currentLang][key];
+                    } else {
+                        element.textContent = translations[currentLang][key];
+                    }
+                }
+            });
+        }
+
+        // Form Submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject');
+            const message = formData.get('message');
+            
+            // Show loading state
+            const submitBtn = document.getElementById('submitBtn');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.textContent = currentLang === 'ar' ? 'جاري الإرسال...' : 'Sending...';
+            
+            // Simulate sending process
+            setTimeout(() => {
+                // Create and send email using EmailJS-like functionality
+                const emailData = {
+                    to_email: 'iyadaraigames@gmail.com',
+                    from_name: name,
+                    from_email: email,
+                    subject: subject,
+                    message: message,
+                    full_message: `
+اسم المرسل: ${name}
+البريد الإلكتروني: ${email}
+الموضوع: ${subject}
+
+الرسالة:
+${message}
+
+---
+تم إرسال هذه الرسالة من موقع التواصل
+                    `.trim()
+                };
+                
+                // Try to open email client as backup
+                const mailtoLink = `mailto:iyadaraigames@gmail.com?subject=${encodeURIComponent(subject + ' - من ' + name)}&body=${encodeURIComponent(emailData.full_message)}`;
+                
+                // Create a hidden link and click it
+                const hiddenLink = document.createElement('a');
+                hiddenLink.href = mailtoLink;
+                hiddenLink.style.display = 'none';
+                document.body.appendChild(hiddenLink);
+                hiddenLink.click();
+                document.body.removeChild(hiddenLink);
+                
+                // Show success message
+                showSuccessMessage();
+                
+                // Reset form
+                event.target.reset();
+                
+                // Reset button
+                submitBtn.disabled = false;
+                submitBtn.textContent = originalText;
+                
+            }, 1500); // 1.5 second delay to simulate sending
+        }
+        
+        function showSuccessMessage() {
+            const successMsg = document.getElementById('successMessage');
+            successMsg.style.display = 'block';
+            successMsg.textContent = translations[currentLang].successMessage;
+            
+            // Add success animation
+            successMsg.style.animation = 'successPulse 0.6s ease-out';
+            
+            // Scroll to success message
+            successMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Hide success message after 7 seconds
+            setTimeout(() => {
+                successMsg.style.opacity = '0';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                    successMsg.style.opacity = '1';
+                }, 500);
+            }, 7000);
+        }
+
+        // Add some interactive animations
+        document.addEventListener('mousemove', function(e) {
+            const cursor = document.querySelector('body');
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            // Create floating particles on mouse move
+            if (Math.random() > 0.98) {
+                createParticle(x, y);
+            }
+        });
+
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.width = '4px';
+            particle.style.height = '4px';
+            particle.style.background = '#4da6ff';
+            particle.style.borderRadius = '50%';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1000';
+            particle.style.animation = 'particleFade 2s ease-out forwards';
+            
+            document.body.appendChild(particle);
+            
+            setTimeout(() => {
+                particle.remove();
+            }, 2000);
+        }
+
+        // Add CSS for particle animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleFade {
+                0% { opacity: 1; transform: translateY(0) scale(1); }
+                100% { opacity: 0; transform: translateY(-50px) scale(0); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
